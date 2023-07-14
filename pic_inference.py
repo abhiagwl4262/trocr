@@ -9,9 +9,11 @@ import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from PIL import Image
-
+import deit
+import trocr_models
 
 def init(model_path, beam=5):
+
     model, cfg, task = fairseq.checkpoint_utils.load_model_ensemble_and_task(
         [model_path],
         arg_overrides={
