@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import deit
 import trocr_models
+import time
 
 def init(model_path, beam=5):
 
@@ -97,9 +98,14 @@ if __name__ == "__main__":
     model, cfg, task, generator, bpe, img_transform, device = init(model_path, beam)
 
     f = open(os.path.dirname(img_dir) + "/results.txt", "w")
+    count = 0
+    tt = 0
     for img_path in tqdm(img_paths):
+        start = time.time()
         sample = preprocess(img_path, img_transform)
         text = get_text(cfg, generator, model, sample, bpe)
+        tt_time = time.time() - start
+        tt += tt_time
         if plot:
             os.makedirs(os.path.join(output_dir, "plots"), exist_ok=True)
             img = Image.open(img_path)
@@ -109,5 +115,8 @@ if __name__ == "__main__":
 
         line = os.path.basename(img_path) + "\t" + text + "\n"
         f.write(line)
+        count += 1
+        if count == 0:
+            break
     f.close()
-    print("done")
+    print("done:", tt / count)
