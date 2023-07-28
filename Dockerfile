@@ -9,3 +9,4 @@ RUN apt-get install -y libmagickwand-dev
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
+WORKDIR /home/ubuntu
