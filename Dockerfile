@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="nvcr.io/nvidia/pytorch:21.02-py3"
+ARG BASE_IMAGE="nvcr.io/nvidia/pytorch:21.06-py3"
 FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND noninteractive
