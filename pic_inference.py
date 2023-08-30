@@ -92,9 +92,13 @@ if __name__ == "__main__":
                         help="enable to plot predictions")
     args = parser.parse_args()
 
+    if args.plot:
+        plot_dir = os.path.join(args.output_dir, "plots")
+        os.makedirs(plot_dir, exist_ok=True)
+    else:
+        os.makedirs(args.output_dir, exist_ok=True)
     img_dir = os.path.join(args.data_path, "image")
     val_data_file = os.path.join(args.data_path, "gt_valid.txt")
-    plot = True
 
     with open(val_data_file, "r") as f:
         lines = f.readlines()
@@ -106,7 +110,7 @@ if __name__ == "__main__":
 
     model, cfg, task, generator, bpe, img_transform, device = init(args.ckpt_path, beam)
 
-    f = open(os.path.dirname(img_dir) + "/results.txt", "w")
+    f = open(args.output_dir + "/results.txt", "w")
     count = 0
     tt = 0
     for img_path in tqdm(img_paths):
@@ -116,11 +120,10 @@ if __name__ == "__main__":
         tt_time = time.time() - start
         tt += tt_time
         if args.plot:
-            os.makedirs(os.path.join(args.output_dir, "plots"), exist_ok=True)
             img = Image.open(img_path)
             plt.imshow(img)
             plt.title(text)
-            plt.savefig(os.path.join(args.output_dir, "plots", os.path.basename(img_path)))
+            plt.savefig(os.path.join(plot_dir, os.path.basename(img_path)))
 
         line = os.path.basename(img_path) + "\t" + text + "\n"
         f.write(line)
